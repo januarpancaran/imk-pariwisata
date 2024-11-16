@@ -303,13 +303,97 @@ class AccountPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Akun Saya'),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'Kamu Belum Login',
+              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 40),
+            SizedBox(
+              width: screenWidth * 0.8,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LoginPage(),
+                    ),
+                  );
+                },
+                child: const Text('Masuk'),
+                style: ElevatedButton.styleFrom(
+                  textStyle: const TextStyle(fontSize: 24),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12), // Border radius
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 25),
+            SizedBox(
+              width: screenWidth * 0.8,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const RegisterPage(),
+                    ),
+                  );
+                },
+                child: const Text('Buat Akun'),
+                style: ElevatedButton.styleFrom(
+                  textStyle: const TextStyle(fontSize: 24),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
+
+// LoginPage Start
+class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Masuk'),
+      ),
+    );
+  }
+}
+// LoginPage End
+
+// RegisterPage Start
+class RegisterPage extends StatelessWidget {
+  const RegisterPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Buat Akun'),
+      ),
+    );
+  }
+}
+// RegisterPage End
 // AccountPage End
 
 // PhotosPage Start
