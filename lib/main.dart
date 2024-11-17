@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+Map<String, String> accountStorage = {};
+String? loggedInEmail;
+
 void main() {
   runApp(const App());
 }
@@ -298,65 +301,139 @@ class MyTicketPage extends StatelessWidget {
 // MyTicketPage End
 
 // AccountPage Start
-class AccountPage extends StatelessWidget {
+class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
 
+  @override
+  State<AccountPage> createState() => _AccountPageState();
+}
+
+class _AccountPageState extends State<AccountPage> {
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
 
+    // If Not Logged In
+    if (loggedInEmail == null) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'Kamu Belum Login',
+                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 40),
+              SizedBox(
+                width: screenWidth * 0.8,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginPage(),
+                      ),
+                    ).then((_) => setState(() {}));
+                  },
+                  style: ElevatedButton.styleFrom(
+                    textStyle: const TextStyle(fontSize: 24),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text('Masuk'),
+                ),
+              ),
+              const SizedBox(height: 25),
+              SizedBox(
+                width: screenWidth * 0.8,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const RegisterPage(),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    textStyle: const TextStyle(fontSize: 24),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text('Buat Akun'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    // If Logged In
     return Scaffold(
-      body: Center(
+      appBar: AppBar(
+        title: const Text('Akun Saya'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              'Kamu Belum Login',
-              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+            Row(
+              children: [
+                const Icon(Icons.person, size: 50),
+                const SizedBox(width: 16),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${accountStorage[loggedInEmail!]}',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      '$loggedInEmail',
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                  ],
+                ),
+              ],
             ),
             const SizedBox(height: 40),
-            SizedBox(
-              width: screenWidth * 0.8,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const LoginPage(),
-                    ),
-                  );
-                },
-                child: const Text('Masuk'),
-                style: ElevatedButton.styleFrom(
-                  textStyle: const TextStyle(fontSize: 24),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12), // Border radius
-                  ),
-                ),
+
+            // Ubah Password
+            ElevatedButton(
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Fitur Ubah Password belum tersedia')),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
               ),
+              child: const Text('Ubah Password'),
             ),
-            const SizedBox(height: 25),
-            SizedBox(
-              width: screenWidth * 0.8,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const RegisterPage(),
-                    ),
-                  );
-                },
-                child: const Text('Buat Akun'),
-                style: ElevatedButton.styleFrom(
-                  textStyle: const TextStyle(fontSize: 24),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
+
+            const SizedBox(height: 16),
+
+            // Logout
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  loggedInEmail = null;
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                backgroundColor: Colors.red,
               ),
+              child: const Text('Logout'),
             ),
           ],
         ),
@@ -366,14 +443,57 @@ class AccountPage extends StatelessWidget {
 }
 
 // LoginPage Start
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  void _login() {
+    final email = _emailController.text;
+    final password = _passwordController.text;
+
+    if (accountStorage[email] == password) {
+      setState(() {
+        loggedInEmail = email;
+      });
+      Navigator.pop(context);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Email atau password salah!')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Masuk'),
+      appBar: AppBar(title: const Text('Login')),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _emailController,
+              decoration: const InputDecoration(labelText: 'Email'),
+            ),
+            TextField(
+              controller: _passwordController,
+              decoration: const InputDecoration(labelText: 'Password'),
+              obscureText: true,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _login,
+              child: const Text('Login'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -381,14 +501,84 @@ class LoginPage extends StatelessWidget {
 // LoginPage End
 
 // RegisterPage Start
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+
+  void _register() {
+    if (_formKey.currentState!.validate()) {
+      final email = _emailController.text;
+      final password = _passwordController.text;
+
+      if (accountStorage.containsKey(email)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Email sudah terdaftar!')),
+        );
+      } else {
+        accountStorage[email] = password;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Registrasi berhasil!')),
+        );
+        Navigator.pop(context);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Buat Akun'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                controller: _nameController,
+                decoration: const InputDecoration(labelText: 'Nama'),
+                validator: (value) => value!.isEmpty ? 'Nama tidak boleh kosong!' : null,
+              ),
+              TextFormField(
+                controller: _emailController,
+                decoration: const InputDecoration(labelText: 'Email'),
+                keyboardType: TextInputType.emailAddress,
+                validator: (value) => value!.isEmpty ? 'Email tidak boleh kosong!' : null,
+              ),
+              TextFormField(
+                controller: _passwordController,
+                decoration: const InputDecoration(labelText: 'Password'),
+                obscureText: true,
+                validator: (value) => value!.isEmpty ? 'Password tidak boleh kosong!' : null,
+              ),
+              TextFormField(
+                controller: _confirmPasswordController,
+                decoration: const InputDecoration(labelText: 'Konfirmasi Password'),
+                obscureText: true,
+                validator: (value) {
+                  if (value != _passwordController.text) {
+                    return 'Password tidak sama!';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(onPressed: _register, child: const Text('Daftar')),
+            ],
+          ),
+        ),
       ),
     );
   }
