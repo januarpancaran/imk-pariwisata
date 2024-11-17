@@ -310,7 +310,6 @@ class MyTicketPage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // Header informasi tiket
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(16.0),
@@ -351,7 +350,6 @@ class MyTicketPage extends StatelessWidget {
               ),
             ),
 
-            // Placeholder untuk daftar tiket
             Expanded(
               child: ticketCount > 0
                   ? ListView.builder(
@@ -720,7 +718,7 @@ class ReservePage extends StatefulWidget {
 }
 
 class _ReservePageState extends State<ReservePage> {
-  final int _ticketPrice = 5000;
+  final int _ticketPrice = 10000;
 
   @override
   Widget build(BuildContext context) {
@@ -1083,7 +1081,290 @@ class ReviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Apa Kata Orang?'),
+        title: const Text('Review'),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            children: [
+              // Review 1
+              Container(
+                padding: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Avatar
+                    CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Colors.grey.shade300,
+                      child: const Icon(
+                        Icons.person,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(width: 15),
+                    // Content
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Name
+                          Text(
+                            'Nama 1',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          // Rating
+                          Row(
+                            children: [
+                              Icon(Icons.star, color: Colors.amber, size: 18),
+                              Icon(Icons.star, color: Colors.amber, size: 18),
+                              Icon(Icons.star, color: Colors.amber, size: 18),
+                              Icon(Icons.star, color: Colors.amber, size: 18),
+                              Icon(Icons.star_border, color: Colors.grey, size: 18),
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                          // Review Text
+                          Text(
+                            'Ini adalah placeholder untuk review singkat. Deskripsi dapat ditambahkan di sini.',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black54,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 15),
+
+              // Review 2
+              Container(
+                padding: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Avatar
+                    CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Colors.grey.shade300,
+                      child: const Icon(
+                        Icons.person,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(width: 15),
+                    // Content
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Name
+                          Text(
+                            'Nama 2',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          // Rating
+                          Row(
+                            children: [
+                              Icon(Icons.star, color: Colors.amber, size: 18),
+                              Icon(Icons.star, color: Colors.amber, size: 18),
+                              Icon(Icons.star, color: Colors.amber, size: 18),
+                              Icon(Icons.star, color: Colors.amber, size: 18),
+                              Icon(Icons.star, color: Colors.amber, size: 18),
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                          // Review Text
+                          Text(
+                            'Review kedua ini memberikan gambaran yang lebih mendetail tentang pengalaman pengguna.',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black54,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 15),
+
+              // Review 3
+              Container(
+                padding: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Avatar
+                    CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Colors.grey.shade300,
+                      child: const Icon(
+                        Icons.person,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(width: 15),
+                    // Content
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Name
+                          Text(
+                            'Nama 3',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          // Rating
+                          Row(
+                            children: [
+                              Icon(Icons.star, color: Colors.amber, size: 18),
+                              Icon(Icons.star, color: Colors.amber, size: 18),
+                              Icon(Icons.star, color: Colors.amber, size: 18),
+                              Icon(Icons.star_border, color: Colors.grey, size: 18),
+                              Icon(Icons.star_border, color: Colors.grey, size: 18),
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                          // Review Text
+                          Text(
+                            'Review ketiga adalah contoh dengan rating yang lebih rendah.',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black54,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 15),
+
+              // Review 4
+              Container(
+                padding: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Avatar
+                    CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Colors.grey.shade300,
+                      child: const Icon(
+                        Icons.person,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(width: 15),
+                    // Content
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Name
+                          Text(
+                            'Nama 4',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          // Rating
+                          Row(
+                            children: [
+                              Icon(Icons.star, color: Colors.amber, size: 18),
+                              Icon(Icons.star, color: Colors.amber, size: 18),
+                              Icon(Icons.star, color: Colors.amber, size: 18),
+                              Icon(Icons.star, color: Colors.amber, size: 18),
+                              Icon(Icons.star_border, color: Colors.grey, size: 18),
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                          // Review Text
+                          Text(
+                            'Review terakhir memberikan kesimpulan dari pengalaman pengguna.',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black54,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
