@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Map<String, String> accountStorage = {};
+Map<String, Map<String, String>> accountStorage = {};
 String? loggedInEmail;
 
 void main() {
@@ -391,7 +391,7 @@ class _AccountPageState extends State<AccountPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${accountStorage[loggedInEmail!]}',
+                      '${accountStorage[loggedInEmail!]?['name']}',
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -458,7 +458,7 @@ class _LoginPageState extends State<LoginPage> {
     final email = _emailController.text;
     final password = _passwordController.text;
 
-    if (accountStorage[email] == password) {
+    if (accountStorage[email]?['password'] == password) {
       setState(() {
         loggedInEmail = email;
       });
@@ -519,13 +519,17 @@ class _RegisterPageState extends State<RegisterPage> {
     if (_formKey.currentState!.validate()) {
       final email = _emailController.text;
       final password = _passwordController.text;
+      final name = _nameController.text;
 
       if (accountStorage.containsKey(email)) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Email sudah terdaftar!')),
         );
       } else {
-        accountStorage[email] = password;
+        accountStorage[email] = {
+          'name': name,
+          'password': password,
+        };
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Registrasi berhasil!')),
         );
