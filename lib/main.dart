@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 Map<String, Map<String, String>> accountStorage = {};
 String? loggedInEmail;
+int ticketCount = 0;
+int totalPrice = 0;
 
 void main() {
   runApp(const App());
@@ -302,6 +304,102 @@ class MyTicketPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tiket Saya'),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            // Header informasi tiket
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16.0),
+              margin: const EdgeInsets.only(bottom: 20.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Detail Tiket Anda',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Jumlah Tiket: $ticketCount',
+                    style: const TextStyle(fontSize: 16, color: Colors.black54),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    'Total Harga: Rp$totalPrice',
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                ],
+              ),
+            ),
+
+            // Placeholder untuk daftar tiket
+            Expanded(
+              child: ticketCount > 0
+                  ? ListView.builder(
+                itemCount: ticketCount,
+                itemBuilder: (context, index) {
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 12.0),
+                    padding: const EdgeInsets.all(16.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Tiket ${index + 1}',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const Text(
+                          'Detail di sini',
+                          style: TextStyle(fontSize: 14, color: Colors.black54),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              )
+                  : const Center(
+                child: Text(
+                  'Belum ada tiket.',
+                  style: TextStyle(fontSize: 16, color: Colors.black54),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -622,13 +720,10 @@ class ReservePage extends StatefulWidget {
 }
 
 class _ReservePageState extends State<ReservePage> {
-  int _ticketCount = 1;
   final int _ticketPrice = 5000;
 
   @override
   Widget build(BuildContext context) {
-    int totalPrice = _ticketCount * _ticketPrice;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Beli Tiket'),
@@ -664,7 +759,7 @@ class _ReservePageState extends State<ReservePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Rp${_ticketPrice.toString()}',
+                        'Rp$_ticketPrice',
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -673,17 +768,16 @@ class _ReservePageState extends State<ReservePage> {
                       Row(
                         children: [
                           IconButton(
-                            onPressed: _ticketCount > 1
-                                ? () {
+                            onPressed: ticketCount > 0 ? () {
                               setState(() {
-                                _ticketCount--;
+                                ticketCount--;
+                                totalPrice = ticketCount * _ticketPrice;
                               });
-                            }
-                                : null,
+                            } : null,
                             icon: const Icon(Icons.remove),
                           ),
                           Text(
-                            _ticketCount.toString(),
+                            ticketCount.toString(),
                             style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -692,28 +786,21 @@ class _ReservePageState extends State<ReservePage> {
                           IconButton(
                             onPressed: () {
                               setState(() {
-                                _ticketCount++;
+                                ticketCount++;
+                                totalPrice = ticketCount * _ticketPrice;
                               });
                             },
                             icon: const Icon(Icons.add),
                           ),
                         ],
-                      ),
+                      )
                     ],
                   ),
                 ],
               ),
             ),
+
             Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border(
-                  top: BorderSide(
-                    color: Colors.grey.shade300,
-                    width: 1.5,
-                  ),
-                ),
-              ),
               padding: const EdgeInsets.all(16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -734,34 +821,21 @@ class _ReservePageState extends State<ReservePage> {
                       ),
                     ],
                   ),
+                  
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => PaymentPage(
-                            totalAmount: totalPrice,
-                          ),
+                          builder: (context) => const PaymentPage()
                         ),
                       );
                     },
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 40.0,
-                        vertical: 12.0,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
-                    child: const Text(
-                      'Bayar',
-                      style: TextStyle(fontSize: 20),
-                    ),
+                    child: const Text('Bayar'),
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -772,9 +846,7 @@ class _ReservePageState extends State<ReservePage> {
 
 // PaymentPage Start
 class PaymentPage extends StatefulWidget {
-  final int totalAmount;
-
-  const PaymentPage({super.key, required this.totalAmount});
+  const PaymentPage({super.key});
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -844,7 +916,7 @@ class _PaymentPageState extends State<PaymentPage> {
                       style: TextStyle(fontSize: 16, color: Colors.grey),
                     ),
                     Text(
-                      'Rp${widget.totalAmount}',
+                      'Rp$totalPrice',
                       style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -886,19 +958,117 @@ class _PaymentPageState extends State<PaymentPage> {
 // PaymentPage End
 
 // ReceiptPage Start
-class ReceiptPage extends StatefulWidget {
+class ReceiptPage extends StatelessWidget {
   const ReceiptPage({super.key});
 
-  @override
-  State<ReceiptPage> createState() => _ReceiptPageState();
-}
-
-class _ReceiptPageState extends State<ReceiptPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Pembayaran Berhasil'),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.check_circle_outline,
+              color: Colors.green,
+              size: 100,
+            ),
+            const SizedBox(height: 16.0),
+            const Text(
+              'Pembelian Berhasil',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 32.0),
+            Container(
+              padding: const EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Tiket Masuk',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        'x $ticketCount',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Divider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Total',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        'Rp$totalPrice',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 32.0),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.popUntil(context, (route) => route.isFirst);
+              },
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 40.0,
+                  vertical: 12.0,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+              child: const Text(
+                'Kembali ke Beranda',
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
