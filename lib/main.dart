@@ -627,6 +627,8 @@ class _ReservePageState extends State<ReservePage> {
 
   @override
   Widget build(BuildContext context) {
+    int totalPrice = _ticketCount * _ticketPrice;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Beli Tiket'),
@@ -668,18 +670,18 @@ class _ReservePageState extends State<ReservePage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-
                       Row(
                         children: [
                           IconButton(
-                            onPressed: _ticketCount > 1 ? () {
+                            onPressed: _ticketCount > 1
+                                ? () {
                               setState(() {
                                 _ticketCount--;
                               });
-                            } : null,
+                            }
+                                : null,
                             icon: const Icon(Icons.remove),
                           ),
-
                           Text(
                             _ticketCount.toString(),
                             style: const TextStyle(
@@ -687,7 +689,6 @@ class _ReservePageState extends State<ReservePage> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-
                           IconButton(
                             onPressed: () {
                               setState(() {
@@ -699,11 +700,10 @@ class _ReservePageState extends State<ReservePage> {
                         ],
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
-
             Container(
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -726,7 +726,7 @@ class _ReservePageState extends State<ReservePage> {
                         style: TextStyle(fontSize: 16, color: Colors.grey),
                       ),
                       Text(
-                        'Rp${(_ticketCount * _ticketPrice).toString()}',
+                        'Rp$totalPrice',
                         style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -734,13 +734,14 @@ class _ReservePageState extends State<ReservePage> {
                       ),
                     ],
                   ),
-
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const PaymentPage(),
+                          builder: (context) => PaymentPage(
+                            totalAmount: totalPrice,
+                          ),
                         ),
                       );
                     },
@@ -770,20 +771,139 @@ class _ReservePageState extends State<ReservePage> {
 // ReservePage End
 
 // PaymentPage Start
-class PaymentPage extends StatelessWidget {
-  const PaymentPage({super.key});
+class PaymentPage extends StatefulWidget {
+  final int totalAmount;
+
+  const PaymentPage({super.key, required this.totalAmount});
+
+  @override
+  State<PaymentPage> createState() => _PaymentPageState();
+}
+
+class _PaymentPageState extends State<PaymentPage> {
+  String? _selectedPaymentMethod;
+
+  final List<Map<String, dynamic>> _paymentMethods = [
+    {"name": "Gopay", "logo": Icons.payment},
+    {"name": "Shopeepay", "logo": Icons.shopping_bag},
+    {"name": "Dana", "logo": Icons.wallet},
+    {"name": "OVO", "logo": Icons.phone_android},
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Bayar Pakai Apa?'),
+        title: const Text("Pilih Metode Pembayaran"),
         centerTitle: true,
+      ),
+      body: Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(16.0),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: _paymentMethods.length,
+              itemBuilder: (context, index) {
+                final method = _paymentMethods[index];
+                return RadioListTile<String>(
+                  value: method["name"],
+                  groupValue: _selectedPaymentMethod,
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedPaymentMethod = value;
+                    });
+                  },
+                  title: Text(method["name"]),
+                  secondary: Icon(method["logo"], size: 40),
+                );
+              },
+            ),
+          ),
+
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border(
+                top: BorderSide(
+                  color: Colors.grey.shade300,
+                  width: 1.5,
+                ),
+              ),
+            ),
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Total',
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                    Text(
+                      'Rp${widget.totalAmount}',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  ],
+                ),
+                ElevatedButton(
+                  onPressed: _selectedPaymentMethod != null ? () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ReceiptPage(),
+                      ),
+                    );
+                  } : null,
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 40.0,
+                      vertical: 12.0,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  child: const Text(
+                    'Bayar',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 // PaymentPage End
+
+// ReceiptPage Start
+class ReceiptPage extends StatefulWidget {
+  const ReceiptPage({super.key});
+
+  @override
+  State<ReceiptPage> createState() => _ReceiptPageState();
+}
+
+class _ReceiptPageState extends State<ReceiptPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Pembayaran Berhasil'),
+      ),
+    );
+  }
+}
+// ReceiptPage End
 
 // ReviewPage Start
 class ReviewPage extends StatelessWidget {
