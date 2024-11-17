@@ -519,7 +519,6 @@ class _RegisterPageState extends State<RegisterPage> {
     if (_formKey.currentState!.validate()) {
       final email = _emailController.text;
       final password = _passwordController.text;
-      final name = _nameController.text;
 
       if (accountStorage.containsKey(email)) {
         ScaffoldMessenger.of(context).showSnackBar(
