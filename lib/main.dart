@@ -29,12 +29,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   late PageController _pageController;
-
-  final List<Widget> _pages = const [
-    MyTicketPage(),
-    HomePage(),
-    AccountPage(),
-  ];
+  late List<Widget> _pages;
 
   int _selectedIndex = 1;
 
@@ -56,6 +51,11 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: 1);
+    _pages = [
+      const MyTicketPage(),
+      HomePage(pageController: _pageController),
+      const AccountPage(),
+    ];
   }
 
   @override
@@ -93,12 +93,12 @@ class _MainPageState extends State<MainPage> {
     );
   }
 }
-
 // MainPage End
 
 // HomePage Start
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final PageController pageController;
+  const HomePage({super.key, required this.pageController});
 
   @override
   Widget build(BuildContext context) {
@@ -192,12 +192,20 @@ class HomePage extends StatelessWidget {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(12.0),
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ReservePage(),
-                            ),
-                          );
+                          if (loggedInEmail == null) {
+                            pageController.animateToPage(
+                              2,
+                              duration: const Duration(microseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+                          } else {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ReservePage(),
+                              ),
+                            );
+                          }
                         },
                         child: Container(
                           width: 180,
@@ -606,19 +614,176 @@ class PhotosPage extends StatelessWidget {
 // PhotosPage End
 
 // ReservePage Start
-class ReservePage extends StatelessWidget {
+class ReservePage extends StatefulWidget {
   const ReservePage({super.key});
+
+  @override
+  State<ReservePage> createState() => _ReservePageState();
+}
+
+class _ReservePageState extends State<ReservePage> {
+  int _ticketCount = 1;
+  final int _ticketPrice = 5000;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Beli Tiket'),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  const Text(
+                    'Tiket Masuk',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 16.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Rp${_ticketPrice.toString()}',
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: _ticketCount > 1 ? () {
+                              setState(() {
+                                _ticketCount--;
+                              });
+                            } : null,
+                            icon: const Icon(Icons.remove),
+                          ),
+
+                          Text(
+                            _ticketCount.toString(),
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+
+                          IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _ticketCount++;
+                              });
+                            },
+                            icon: const Icon(Icons.add),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border(
+                  top: BorderSide(
+                    color: Colors.grey.shade300,
+                    width: 1.5,
+                  ),
+                ),
+              ),
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Total',
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                      ),
+                      Text(
+                        'Rp${(_ticketCount * _ticketPrice).toString()}',
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const PaymentPage(),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 40.0,
+                        vertical: 12.0,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    child: const Text(
+                      'Bayar',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
 }
 // ReservePage End
+
+// PaymentPage Start
+class PaymentPage extends StatelessWidget {
+  const PaymentPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Bayar Pakai Apa?'),
+        centerTitle: true,
+      ),
+    );
+  }
+}
+// PaymentPage End
 
 // ReviewPage Start
 class ReviewPage extends StatelessWidget {
