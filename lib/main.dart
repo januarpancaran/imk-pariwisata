@@ -29,12 +29,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   late PageController _pageController;
-
-  final List<Widget> _pages = const [
-    MyTicketPage(),
-    HomePage(),
-    AccountPage(),
-  ];
+  late List<Widget> _pages;
 
   int _selectedIndex = 1;
 
@@ -56,6 +51,11 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: 1);
+    _pages = [
+      const MyTicketPage(),
+      HomePage(pageController: _pageController),
+      const AccountPage(),
+    ];
   }
 
   @override
@@ -98,7 +98,8 @@ class _MainPageState extends State<MainPage> {
 
 // HomePage Start
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final PageController pageController;
+  const HomePage({super.key, required this.pageController});
 
   @override
   Widget build(BuildContext context) {
@@ -192,12 +193,20 @@ class HomePage extends StatelessWidget {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(12.0),
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ReservePage(),
-                            ),
-                          );
+                          if (loggedInEmail == null) {
+                            pageController.animateToPage(
+                              2,
+                              duration: const Duration(microseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+                          } else {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ReservePage(),
+                              ),
+                            );
+                          }
                         },
                         child: Container(
                           width: 180,
