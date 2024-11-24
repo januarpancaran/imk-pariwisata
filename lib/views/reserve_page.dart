@@ -85,6 +85,13 @@ class _ReservePageState extends State<ReservePage> {
             ),
 
             Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border(
+                  top: BorderSide(color: Colors.grey.shade300, width: 1.5),
+                ),
+              ),
               padding: const EdgeInsets.all(16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -109,7 +116,17 @@ class _ReservePageState extends State<ReservePage> {
                         builder: (context) => const PaymentPage(),
                       ));
                     },
-                    child: const Text('Bayar'),
+                    style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 40.0,
+                          vertical: 12.0,
+                        ),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0))
+                    ),
+                    child: const Text(
+                      'Bayar',
+                      style: TextStyle(fontSize: 20),
+                    ),
                   ),
                 ],
               ),

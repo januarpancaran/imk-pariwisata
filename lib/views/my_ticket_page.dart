@@ -78,10 +78,6 @@ class MyTicketPage extends StatelessWidget {
                           'Tiket ${index + 1}',
                           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                         ),
-                        const Text(
-                          'Detail di sini',
-                          style: TextStyle(fontSize: 14, color: Colors.black54),
-                        )
                       ],
                     ),
                   );

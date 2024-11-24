@@ -35,15 +35,13 @@ class PhotosPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mengenal Lebih Dekat'),
+        title: const Text('Foto-foto'),
         centerTitle: true,
       ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
-          _buildCard('assets/images/laut.jpeg', 'Pinggiran Laut 1'),
-          const SizedBox(height: 16),
-          _buildCard('assets/images/laut2.jpeg', 'Pinggiran Laut 2'),
+          _buildCard('assets/images/laut.jpeg', 'Pinggiran Laut'),
           const SizedBox(height: 16),
           _buildCard('assets/images/perahu.jpeg', 'Sewa Perahu'),
           const SizedBox(height: 16),
