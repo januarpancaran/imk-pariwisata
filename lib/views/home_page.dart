@@ -74,7 +74,7 @@ class HomePage extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      'Pesona Pantai Marina',
+                      'MarinaLoka',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: 'PlayfairDisplay',

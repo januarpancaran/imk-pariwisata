@@ -35,7 +35,7 @@ class PhotosPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Foto-foto'),
+        title: const Text('Galeri'),
         centerTitle: true,
       ),
       body: ListView(
