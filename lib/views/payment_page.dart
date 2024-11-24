@@ -13,10 +13,10 @@ class _PaymentPageState extends State<PaymentPage> {
   String? _selectedPaymentMethod;
 
   final List<Map<String, dynamic>> _paymentMethods = [
-    { "name": "Gopay", "logo": Icons.payment },
-    { "name": "Shopeepay", "logo": Icons.shopping_bag },
-    { "name": "Dana", "logo": Icons.wallet },
-    { "name": "OVO", "logo": Icons.phone_android },
+    { "name": "Gopay", "logo": "assets/images/gopay.png" },
+    { "name": "Shopeepay", "logo": "assets/images/shopeepay.png" },
+    { "name": "Dana", "logo": "assets/images/dana.png" },
+    { "name": "OVO", "logo": "assets/images/ovo.png" },
   ];
 
   @override
@@ -45,7 +45,7 @@ class _PaymentPageState extends State<PaymentPage> {
                     });
                   },
                   title: Text(method["name"]),
-                  secondary: Icon(method["logo"], size: 40),
+                  secondary: Image.asset(method["logo"], width: 40, height: 40,),
                 );
               },
             ),

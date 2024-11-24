@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'home_page.dart';
+import 'photos_page.dart';
 import 'account_page.dart';
 import 'my_ticket_page.dart';
 
@@ -14,7 +15,7 @@ class _MainPageState extends State<MainPage> {
   late PageController _pageController;
   late List<Widget> _pages;
 
-  int _selectedIndex = 1;
+  int _selectedIndex = 0;
 
   void _onPageChange(int index) {
     setState(() {
@@ -33,10 +34,11 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: 1);
+    _pageController = PageController(initialPage: 0);
     _pages = [
-      const MyTicketPage(),
       HomePage(pageController: _pageController),
+      const PhotosPage(),
+      const MyTicketPage(),
       const AccountPage(),
     ];
   }
@@ -53,22 +55,45 @@ class _MainPageState extends State<MainPage> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTap,
-        items: const [
-          // Ticket Icon
-          BottomNavigationBarItem(
-            icon: Icon(Icons.airplane_ticket),
-            label: 'Tiket Saya',
-          ),
-
+        type: BottomNavigationBarType.fixed,
+        items: [
           // Home Icon
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Image.asset(
+              'assets/images/home.png',
+              width: 24,
+              height: 24,
+            ),
             label: 'Beranda',
+          ),
+
+          // Explore Icon
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              'assets/images/images.png',
+              width: 24,
+              height: 24,
+            ),
+            label: 'Galeri',
+          ),
+
+          // Ticket Icon
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              'assets/images/ticket.png',
+              width: 24,
+              height: 24,
+            ),
+            label: 'Tiket Saya',
           ),
 
           // Account Icon
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+            icon: Image.asset(
+              'assets/images/profile.png',
+              width: 24,
+              height: 24,
+            ),
             label: 'Akun Saya',
           ),
         ],
